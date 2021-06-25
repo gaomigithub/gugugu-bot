@@ -2294,6 +2294,11 @@ archy@^1.0.0:
   resolved "https://registry.npm.taobao.org/archy/download/archy-1.0.0.tgz#f9c8c13757cc1dd7bc379ac77b2c62a5c2868c40"
   integrity sha1-+cjBN1fMHde8N5rHeyxipcKGjEA=
 
+area-data@^5.0.6:
+  version "5.0.6"
+  resolved "https://registry.npm.taobao.org/area-data/download/area-data-5.0.6.tgz#c381c3f88ff9e1050accd07549d206fce2a28d13"
+  integrity sha1-w4HD+I/54QUKzNB1SdIG/OKijRM=
+
 argparse@^1.0.7:
   version "1.0.10"
   resolved "https://registry.nlark.com/argparse/download/argparse-1.0.10.tgz#bcd6791ea5ae09725e17e5ad988134cd40b3d911"
@@ -4535,7 +4540,7 @@ data-urls@^1.1.0:
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
 
-dayjs@^1.7.7:
+dayjs@^1.7.7, dayjs@^1.8.17:
   version "1.10.5"
   resolved "https://registry.nlark.com/dayjs/download/dayjs-1.10.5.tgz?cache=0&sync_timestamp=1622012243793&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fdayjs%2Fdownload%2Fdayjs-1.10.5.tgz#5600df4548fc2453b3f163ebb2abbe965ccfb986"
   integrity sha1-VgDfRUj8JFOz8WPrsqu+llzPuYY=
@@ -9047,6 +9052,15 @@ move-concurrently@^1.0.1:
     mkdirp "^0.5.1"
     rimraf "^2.5.4"
     run-queue "^1.0.3"
+
+mp-colorui@1.0.0-beta.1:
+  version "1.0.0-beta.1"
+  resolved "https://registry.npm.taobao.org/mp-colorui/download/mp-colorui-1.0.0-beta.1.tgz#94033ee3531cc868ca3fb850cea44da1c6d18c83"
+  integrity sha1-lAM+41McyGjKP7hQzqRNocbRjIM=
+  dependencies:
+    area-data "^5.0.6"
+    dayjs "^1.8.17"
+    rimraf "^3.0.2"
 
 ms@2.0.0:
   version "2.0.0"

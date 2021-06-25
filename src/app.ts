@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import './app.css'
+import "mp-colorui/dist/style/index.scss";
 
 class App extends Component {
 
