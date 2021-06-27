@@ -13,7 +13,7 @@ interface IProps {
 }
 
 function Modal(props: IProps) {
-  const { show,showAction } = props;
+  const { show, showAction } = props;
   const [normal, setNormal] = useState<boolean>(false)
 
   // 可以使用所有的 React Hooks
@@ -32,7 +32,7 @@ function Modal(props: IProps) {
     <ClModal
       show={normal}
       closeWithShadow
-      title='你为什么要点？'
+      title='啵咕'
       close
       actions={[
         {
@@ -40,7 +40,7 @@ function Modal(props: IProps) {
           color: 'red'
         },
         {
-          text: '我的错',
+          text: '下次一定',
           color: 'blue'
         }
       ]}
@@ -52,12 +52,12 @@ function Modal(props: IProps) {
         setNormal(false);
         showAction(false);
       }}
-    onClick={() => {
-      setNormal(false);
-      showAction(false);
-    }}
+      onClick={() => {
+        setNormal(false);
+        showAction(false);
+      }}
     >
-      不要乱点！RuaRuaRuaRuaRuaRuaRuaRuaRua！！！
+      我可爱吗？能给我打钱钱吗？
     </ClModal>
   )
 }
