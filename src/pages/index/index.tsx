@@ -10,8 +10,10 @@ import { ClButton, ClText, ClIcon, ClAnimation } from "mp-colorui";
 import './index.css'
 import Modal from '../../components/TipModal';
 import Calendar from '../../components/Calendar';
+import { NormalServices } from '../../services/normalServices';
 
 function Index() {
+  const normalServices = new NormalServices
   const imgSource = require('../../utils/imgSource');
   const dateTool = require('../../utils/dateTool');
   const dataSource = require('../../utils/dataSource');
@@ -36,13 +38,20 @@ function Index() {
   }, [])
 
   const handleSentences = useCallback(() => {
-    const str = dataSource.sentences[Math.floor(Math.random() * dataSource.sentences.length)].value
+    const str = dataSource.sentences[Math.floor(Math.random() * dataSource.normalSentences.length)].value
     setSentence(str)
     return str
   }, [dataSource])
 
+  const testRequest = async () => {
+    const test = await normalServices.weatherShanghai()
+    console.log(test)
+  }
+
   // 可以使用所有的 React Hooks
-  useEffect(() => { })
+  useEffect(() => {
+    testRequest()
+  })
   // 对应 onReady
   useReady(() => { })
   // 对应 onShow

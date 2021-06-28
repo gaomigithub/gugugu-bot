@@ -1,5 +1,5 @@
 const dataSource = {
-  sentences: [
+  normalSentences: [
     { "id": 1, "value": "下次吧，下次一定！" },
     { "id": 2, "value": "话说今天好热太阳也好大啊，你是不是也这么觉得啊？" },
     { "id": 3, "value": "啊？你该不会已经到了吧？" },

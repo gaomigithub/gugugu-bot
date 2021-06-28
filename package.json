@@ -43,8 +43,10 @@
     "@tarojs/taro": "3.2.13",
     "lodash": "4.17.15",
     "mp-colorui": "1.0.0-beta.1",
+    "qs": "^6.10.1",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
+    "taro-axios": "^1.1.1",
     "taro-ui": "^3.0.0-alpha.3",
     "weui": "^2.4.4"
   },
