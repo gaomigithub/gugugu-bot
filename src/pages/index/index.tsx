@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useReducer, useState } from 'react'
 import { View, Text, Image } from '@tarojs/components'
 import {
   useReady,
@@ -6,52 +6,84 @@ import {
   useDidHide,
   usePullDownRefresh
 } from '@tarojs/taro'
-import { ClButton, ClText, ClIcon, ClAnimation } from "mp-colorui";
+import { ClButton, ClText, ClFloatButton } from "mp-colorui";
 import './index.css'
-import Modal from '../../components/TipModal';
+import { NormalServices } from '../../services/NormalServices';
+import TipModal from '../../components/TipModal';
 import Calendar from '../../components/Calendar';
-import { NormalServices } from '../../services/normalServices';
+import Weather from '../../components/Weather';
+import { Forecast, Lives, WeatherAPIExtensions } from 'src/models/weather';
+
+const initialState = { action: "" as string };
+
+function reducer(state: any, action: any) {
+  switch (action.type) {
+    case 'weather':
+      return { action: "weather" };
+    case 'calendar':
+      return { action: "calendar" };
+    case 'clean':
+      return { action: "" };
+    default:
+      throw new Error();
+  }
+}
 
 function Index() {
-  const normalServices = new NormalServices
-  const imgSource = require('../../utils/imgSource');
+  const normalServices = new NormalServices;
+  const imgUrl = "Avatar.jpg";
+  const imgSource = require('../../assets/img/' + imgUrl);
   const dateTool = require('../../utils/dateTool');
   const dataSource = require('../../utils/dataSource');
   const defaultUIColors = ['red', 'orange', 'yellow', 'olive', 'green', 'mauve', 'purple'];
 
+  const [sentence, setSentence] = useState<string | undefined>(undefined)
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [isShowTest, setIsShowTest] = useState<boolean>(false)
   const [isShowCalendar, setIsShowCalendar] = useState<boolean>(false)
-  const [sentence, setSentence] = useState<string | undefined>(undefined)
+  const [isShowWeather, setIsShowWeather] = useState<boolean>(false)
 
   const handleShowTest = useCallback(() => {
     setIsShowTest(true)
   }, [])
   const showAction = useCallback((value: boolean) => {
-    setIsShowTest(value)
-  }, [])
-
-  const handleShowCalendar = useCallback(() => {
-    setIsShowCalendar(true)
+    setIsShowTest(value);
+    dispatch({ type: 'clean' });
   }, [])
   const calendarShowAction = useCallback((value: boolean) => {
-    setIsShowCalendar(value)
+    setIsShowCalendar(value);
+    dispatch({ type: 'clean' });
   }, [])
-
+  const weatherShowAction = useCallback((value: boolean) => {
+    setIsShowWeather(value);
+    dispatch({ type: 'clean' });
+  }, [])
   const handleSentences = useCallback(() => {
-    const str = dataSource.sentences[Math.floor(Math.random() * dataSource.normalSentences.length)].value
+    const str = dataSource.normalSentences[Math.floor(Math.random() * dataSource.normalSentences.length)].value
     setSentence(str)
     return str
   }, [dataSource])
 
-  const testRequest = async () => {
-    const test = await normalServices.weatherShanghai()
-    console.log(test)
+  const getWeather = async (cityId: number, extensions: WeatherAPIExtensions) => {
+    const weather = await normalServices.weatherShanghai(cityId, extensions)
+    if(weather?.lives){
+      return weather?.lives
+    } else return
   }
 
   // 可以使用所有的 React Hooks
+  // useEffect(() => {
+  // })
   useEffect(() => {
-    testRequest()
-  })
+    switch (state.action) {
+      case 'weather':
+        return setIsShowWeather(true)
+      case 'calendar':
+        return setIsShowCalendar(true)
+      default:
+        return;
+    }
+  }, [state.action])
   // 对应 onReady
   useReady(() => { })
   // 对应 onShow
@@ -66,21 +98,38 @@ function Index() {
     <View className='index'>
       <View className='container' >
         <Image className="bubble" style={{ width: `150px`, height: `150px`, borderRadius: `50%`, WebkitBorderRadius: `50%`, MozBorderRadius: `50%`, boxShadow: `0px 2px 12px 0px rgba(61, 73, 102, 0.2)` }}
-          src={imgSource.pigeon} onClick={handleSentences}></Image>
-
+          src={imgSource} onClick={handleSentences}></Image>
         <View style='margin-top: 50px; display: flex; flex-direction: column; align-items: center;'>
           {sentence ? <ClText align='center' text={sentence} size='large' fontWeight='bolder' textColor={defaultUIColors[Math.floor(Math.random() * defaultUIColors.length)]} />
-            : <ClText text={"What The Pigeon Say Today?"} size='large' fontWeight='bolder' />}<Text style='margin: 50px'>{dateTool.now(1)}</Text>
+            : <ClText text={"What The Pigeon Say Today?"} size='large' fontWeight='bolder' />}
+          <Text style='margin: 50px'>{dateTool.now(1)}</Text>
         </View>
       </View>
       <View style='position:absolute;left:0px;bottom:0px; margin:20px;'>
-        <ClButton onClick={handleShowCalendar} shape='round' bgColor='blue'>日历</ClButton>
+        <ClFloatButton
+          onActionClick={(val: any) => { val === 0 ? dispatch({ type: 'weather' }) : dispatch({ type: 'calendar' }) }}
+          size='large'
+          bgColor='blue'
+          closeWithShadow
+          direction='vertical'
+          move
+          actionList={[
+            {
+              icon: 'light'
+            },
+            {
+              icon: 'calendar'
+            }
+          ]}
+        />
       </View>
       <View style='position:absolute;right:0px;bottom:0px; margin:20px;'>
-        <ClButton onClick={handleShowTest} shape='round' bgColor='red'>咕</ClButton>
+        <ClButton onClick={handleShowTest} shape='round' bgColor='red' size='large'
+        >咕</ClButton>
       </View>
-      <Modal show={isShowTest} showAction={showAction}></Modal>
-      <Calendar show={isShowCalendar} calendarShowAction={calendarShowAction}></Calendar>
+      <TipModal show={isShowTest} showAction={showAction}></TipModal>
+      <Calendar show={isShowCalendar} showAction={calendarShowAction}></Calendar>
+      <Weather show={isShowWeather} showAction={weatherShowAction} getWeather={getWeather}></Weather>
     </View>
   )
 }

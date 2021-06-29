@@ -1,47 +1,28 @@
-import React, { useEffect, useState } from 'react'
-import {
-  useReady,
-  useDidShow,
-  useDidHide,
-  usePullDownRefresh
-} from '@tarojs/taro'
-import { ClModal, ClCalendar } from "mp-colorui";
+import React from 'react'
+import { ClCalendar } from "mp-colorui";
+import Modal from './Modal';
 
 interface IProps {
   show: boolean
-  calendarShowAction: (value: boolean) => void;
+  showAction: (value: boolean) => void;
 }
 
-function Modal(props: IProps) {
-  const { show, calendarShowAction } = props;
-  const [normal, setNormal] = useState<boolean>(false)
-
-  // 可以使用所有的 React Hooks
-  useEffect(() => {
-    setNormal(show)
-  }, [show])
-  // 对应 onReady
-  useReady(() => { })
-  // 对应 onShow
-  useDidShow(() => { })
-  // 对应 onHide
-  useDidHide(() => { })
-  usePullDownRefresh(() => { })
-
+function Calendar(props: IProps) {
+  const { show, showAction } = props;
   return (
-    <ClModal
-      show={normal}
-      closeWithShadow
-      title='啵咕'
-      close
+    <Modal
+      show={show}
+      title='日历'
       onClose={() => {
-        setNormal(false);
-        calendarShowAction(false);
+        showAction(false);
+      }}
+      onCancel={() => {
+        showAction(false);
       }}
     >
       <ClCalendar showType="full" backToToday={false} highlightWeekend={true} />
-    </ClModal>
+    </Modal>
   )
 }
 
-export default Modal
+export default Calendar

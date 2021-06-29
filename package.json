@@ -26,14 +26,15 @@
     "dev:rn": "npm run build:rn -- --watch",
     "dev:qq": "npm run build:qq -- --watch",
     "dev:jd": "npm run build:jd -- --watch",
-    "dev:quickapp": "npm run build:quickapp -- --watch"
+    "dev:quickapp": "npm run build:quickapp -- --watch",
+    "dev:wexin": "taro build --type weapp -- --watch --env production"
   },
   "browserslist": [
     "last 3 versions",
     "Android >= 4.1",
     "ios >= 8"
   ],
-  "author": "",
+  "author": "Mi Gao <398938578@qq.com>",
   "dependencies": {
     "@babel/runtime": "^7.7.7",
     "@tarojs/cli": "3.2.13",
@@ -41,13 +42,16 @@
     "@tarojs/react": "3.2.13",
     "@tarojs/runtime": "3.2.13",
     "@tarojs/taro": "3.2.13",
+    "gulp-postcss": "^9.0.0",
     "lodash": "4.17.15",
-    "mp-colorui": "1.0.0-beta.1",
+    "mp-colorui": "^1.0.0-alpha.0.0.1",
+    "postcss": "^8.1.0",
     "qs": "^6.10.1",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "taro-axios": "^1.1.1",
     "taro-ui": "^3.0.0-alpha.3",
+    "webpack": "4.0.0",
     "weui": "^2.4.4"
   },
   "devDependencies": {
@@ -58,13 +62,31 @@
     "@types/webpack-env": "^1.13.6",
     "@typescript-eslint/eslint-plugin": "^4.15.1",
     "@typescript-eslint/parser": "^4.15.1",
+    "autoprefixer": "^9.0.0",
     "babel-preset-taro": "3.2.13",
     "eslint": "^6.8.0",
+    "eslint-config-standard": "^16.0.3",
     "eslint-config-taro": "3.2.13",
-    "eslint-plugin-import": "^2.12.0",
+    "eslint-friendly-formatter": "^4.0.1",
+    "eslint-import-resolver-webpack": "^0.13.1",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-flow-vars": "^0.5.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-react": "^7.8.2",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-standard": "^5.0.0",
+    "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-htmlmin": "^5.0.1",
+    "gulp-load-plugins": "^2.0.7",
+    "gulp-pretty-data": "^0.1.2",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "run-sequence": "^2.2.1",
     "stylelint": "9.3.0",
-    "typescript": "^4.1.0"
+    "typescript": "^4.1.0",
+    "uglifyjs-webpack-plugin": "^2.2.0"
   }
 }

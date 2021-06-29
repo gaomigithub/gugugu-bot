@@ -4,7 +4,7 @@
   "description": "What The Pigeon Say",
   "appid": "wx55b49a90bcb6e6fa",
   "setting": {
-    "urlCheck": false,
+    "urlCheck": true,
     "es6": false,
     "enhance": false,
     "postcss": false,
