@@ -8,6 +8,7 @@ interface IProps {
 }
 function TipModal(props: IProps) {
   const { show, showAction } = props;
+  const imgSource = require('../assets/imgBase4');
   const [showLiar, setShowLiar] = useState<boolean>(false)
 
   return (
@@ -55,7 +56,7 @@ function TipModal(props: IProps) {
         onClick={() => { }}
       >
         <View style={{
-          background: "url('./../../assets/img/Liar.jpg') no-repeat",
+          background: `url(${imgSource.liar}) no-repeat`,
           width: 300,
           height: 300,
           backgroundSize: "100% 100%",
