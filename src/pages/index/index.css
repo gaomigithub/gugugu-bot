@@ -72,3 +72,9 @@
   opacity: 1;
   transition: 0s;
 }
+
+.bg {
+  background: url('./../../assets/img/Liar.jpg');
+  width: 300;
+  height: 300
+}

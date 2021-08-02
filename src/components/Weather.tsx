@@ -53,6 +53,7 @@ function Weather(props: IProps) {
         (data[0].weather === ("晴" || "少云" || "平静" || "微风" || "和风") ? "天气很棒，出门玩吗！" :
           "天气不棒 注意身体哦 ")
         : undefined}
+      onClick={() => { }}
       onCancel={() => {
         showAction(false);
       }}
@@ -69,8 +70,8 @@ function Weather(props: IProps) {
               right: 0,
               margin: "auto", transform: "translateY(-50%)"
             }}>
-              温度：{data[0]?.temperature}<br />
-              湿度：{data[0]?.humidity}</view>
+              <view>温度：{data[0]?.temperature}</view><br />
+              <view>湿度：{data[0]?.humidity}</view></view>
           </View>
           <View className={weatherBgColor} style='position: relative;height:100px'>
             <view style={{
@@ -89,8 +90,8 @@ function Weather(props: IProps) {
               right: 0,
               margin: "auto", transform: "translateY(-50%)"
             }}>
-              风向：{data[0]?.winddirection}<br />
-        风力：{data[0]?.windpower} 级</view>
+              <view>风向：{data[0]?.winddirection}</view><br />
+              <view>风力：{data[0]?.windpower} 级</view></view>
           </View>
         </ClGrid>}
     </Modal>

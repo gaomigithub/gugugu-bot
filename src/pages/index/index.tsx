@@ -31,8 +31,8 @@ function reducer(state: any, action: any) {
 
 function Index() {
   const normalServices = new NormalServices;
-  const imgUrl = "Avatar.jpg";
-  const imgSource = require('../../assets/img/' + imgUrl);
+  const imgSourceStatic = require('../../assets/img/Avatar.jpg');
+  const imgSourceGif = require('../../assets/img/gugu.gif');
   const dateTool = require('../../utils/dateTool');
   const dataSource = require('../../utils/dataSource');
   const defaultUIColors = ['red', 'orange', 'yellow', 'olive', 'green', 'mauve', 'purple'];
@@ -42,12 +42,27 @@ function Index() {
   const [isShowTest, setIsShowTest] = useState<boolean>(false)
   const [isShowCalendar, setIsShowCalendar] = useState<boolean>(false)
   const [isShowWeather, setIsShowWeather] = useState<boolean>(false)
+  const [liarOrGugu, setLiarOrGugu] = useState<boolean>(true)
+  const [mainIconObj, setMainIconObj] = useState<string>(imgSourceStatic)
+
+  useEffect(() => {
+    if (liarOrGugu === false) {
+      setMainIconObj(imgSourceGif)
+    }
+  }, [liarOrGugu])
+
+  useEffect(() => {
+    console.log("liarOrGugu", liarOrGugu)
+  }, [liarOrGugu])
 
   const handleShowTest = useCallback(() => {
     setIsShowTest(true)
   }, [])
-  const showAction = useCallback((value: boolean) => {
+  const tipShowAction = useCallback((value: boolean, tag?: boolean) => {
     setIsShowTest(value);
+    if (tag !== undefined) {
+      setLiarOrGugu(tag);
+    }
     dispatch({ type: 'clean' });
   }, [])
   const calendarShowAction = useCallback((value: boolean) => {
@@ -66,7 +81,7 @@ function Index() {
 
   const getWeather = async (cityId: number, extensions: WeatherAPIExtensions) => {
     const weather = await normalServices.weatherShanghai(cityId, extensions)
-    if(weather?.lives){
+    if (weather?.lives) {
       return weather?.lives
     } else return
   }
@@ -98,9 +113,9 @@ function Index() {
     <View className='index'>
       <View className='container' >
         <Image className="bubble" style={{ width: `150px`, height: `150px`, borderRadius: `50%`, WebkitBorderRadius: `50%`, MozBorderRadius: `50%`, boxShadow: `0px 2px 12px 0px rgba(61, 73, 102, 0.2)` }}
-          src={imgSource} onClick={handleSentences}></Image>
+          src={mainIconObj} onClick={handleSentences}></Image>
         <View style='margin-top: 50px; display: flex; flex-direction: column; align-items: center;'>
-          {sentence ? <ClText align='center' text={sentence} size='large' fontWeight='bolder' textColor={defaultUIColors[Math.floor(Math.random() * defaultUIColors.length)]} />
+          {sentence ? <View style='height: 30px'><ClText align='center' text={sentence} size='large' fontWeight='bolder' textColor={defaultUIColors[Math.floor(Math.random() * defaultUIColors.length)]} /></View>
             : <ClText text={"What The Pigeon Say Today?"} size='large' fontWeight='bolder' />}
           <Text style='margin: 50px'>{dateTool.now(1)}</Text>
         </View>
@@ -127,7 +142,7 @@ function Index() {
         <ClButton onClick={handleShowTest} shape='round' bgColor='red' size='large'
         >咕</ClButton>
       </View>
-      <TipModal show={isShowTest} showAction={showAction}></TipModal>
+      <TipModal show={isShowTest} showAction={tipShowAction}></TipModal>
       <Calendar show={isShowCalendar} showAction={calendarShowAction}></Calendar>
       <Weather show={isShowWeather} showAction={weatherShowAction} getWeather={getWeather}></Weather>
     </View>

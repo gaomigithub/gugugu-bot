@@ -14,13 +14,17 @@ interface IProps {
     text: string,
     color: string
   }[];
+  onClick: (index: any) => void;
   onClose: () => void;
   onCancel: () => void;
   // showAction: (value: boolean) => void;
+  custom?: boolean;
+  titleBgColor?: string;
+  actionColor?: string;
 }
 
 function Modal(props: IProps & { children: React.ReactNode }) {
-  const { title, show, actions, onClose, onCancel, children } = props;
+  const { custom, actionColor, titleBgColor, title, show, actions, onClick, onClose, onCancel, children } = props;
   const [normal, setNormal] = useState<boolean>(false)
 
   // 可以使用所有的 React Hooks
@@ -38,16 +42,16 @@ function Modal(props: IProps & { children: React.ReactNode }) {
   return (
     <ClModal
       show={normal}
+      custom={custom ?? false}
+      titleBgColor={titleBgColor}
+      actionColor={actionColor}
       closeWithShadow
       title={title}
       close
       actions={actions}
-      onClose={() => {
-        onClose();
-      }}
-      onCancel={() => {
-        onCancel();
-      }}
+      onClick={onClick}
+      onClose={onClose}
+      onCancel={onCancel}
     >
       {children}
     </ClModal>

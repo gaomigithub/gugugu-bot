@@ -13,6 +13,7 @@ function Calendar(props: IProps) {
     <Modal
       show={show}
       title='日历'
+      onClick={() => { }}
       onClose={() => {
         showAction(false);
       }}
