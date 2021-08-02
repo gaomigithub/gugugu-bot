@@ -56,11 +56,9 @@ function TipModal(props: IProps) {
         onClick={() => { }}
       >
         <View style={{
-          background: `url(${imgSource.liar}) no-repeat`,
-          width: 300,
-          height: 300,
-          backgroundSize: "100% 100%",
-          backgroundPosition: "center center"
+          background: `url(${imgSource.liar}) no-repeat center`,
+          height: 350,
+          backgroundSize: "cover",
         }}></View>
       </Modal>
     </View >
