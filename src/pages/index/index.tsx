@@ -13,19 +13,25 @@ import TipModal from '../../components/TipModal';
 import Calendar from '../../components/Calendar';
 import Weather from '../../components/Weather';
 import { Forecast, Lives, WeatherAPIExtensions } from 'src/models/weather';
+import { AtTabBar, AtDrawer, AtIcon } from 'taro-ui'
+
+interface DrawItems {
+  name: string;
+  iconType: string;
+}
 
 const initialState = { action: "" as string };
 
 function reducer(state: any, action: any) {
   switch (action.type) {
-    case 'weather':
-      return { action: "weather" };
-    case 'calendar':
-      return { action: "calendar" };
+    // case 'weather':
+    //   return { ...state,action: "weather" };
+    // case 'calendar':
+    //   return { action: "calendar" };
     case 'clean':
       return { action: "" };
     default:
-      throw new Error();
+      return { ...state, action: action.type };
   }
 }
 
@@ -39,40 +45,57 @@ function Index() {
 
   const [sentence, setSentence] = useState<string | undefined>(undefined)
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [isShowTest, setIsShowTest] = useState<boolean>(false)
+  const [currSelectedBar, setCurrSelectedBar] = useState<number>(1)
+  const [isShowDrawer, setIsShowDrawer] = useState<boolean>(false)
+  const [isShowTip, setIsShowTip] = useState<boolean>(false)
   const [isShowCalendar, setIsShowCalendar] = useState<boolean>(false)
   const [isShowWeather, setIsShowWeather] = useState<boolean>(false)
   const [liarOrGugu, setLiarOrGugu] = useState<boolean>(true)
   const [mainIconObj, setMainIconObj] = useState<string>(imgSourceStatic)
 
-  useEffect(() => {
-    if (liarOrGugu === false) {
-      setMainIconObj(imgSourceGif)
-    }
-  }, [liarOrGugu])
+  const drawerItems: DrawItems[] = [{ name: 'Weather', iconType: 'lightning-bolt' }, { name: 'Calendar', iconType: 'calendar' }]
 
-  useEffect(() => {
-    console.log("liarOrGugu", liarOrGugu)
-  }, [liarOrGugu])
+  const reset = useCallback(() => {
+    dispatch({ type: 'clean' });
+    setCurrSelectedBar(1)
+  }, [dispatch])
 
-  const handleShowTest = useCallback(() => {
-    setIsShowTest(true)
+  const onTabBarClick = useCallback((val) => {
+    setCurrSelectedBar(val)
   }, [])
+
+  const onDrawerItemClick = useCallback((val: string) => {
+    dispatch({ type: val.toLowerCase() })
+    return setIsShowDrawer(false)
+  }, [dispatch])
+
+  const onDrawerClose = useCallback(() => {
+    setIsShowDrawer(false)
+    reset()
+  }, [reset])
+
+  const handleShowTip = useCallback(() => {
+    setIsShowTip(true)
+  }, [])
+
   const tipShowAction = useCallback((value: boolean, tag?: boolean) => {
-    setIsShowTest(value);
+    setIsShowTip(value);
     if (tag !== undefined) {
       setLiarOrGugu(tag);
     }
-    dispatch({ type: 'clean' });
-  }, [])
+    reset()
+  }, [reset])
+
   const calendarShowAction = useCallback((value: boolean) => {
     setIsShowCalendar(value);
-    dispatch({ type: 'clean' });
-  }, [])
+    reset()
+  }, [reset])
+
   const weatherShowAction = useCallback((value: boolean) => {
     setIsShowWeather(value);
-    dispatch({ type: 'clean' });
-  }, [])
+    reset()
+  }, [reset])
+
   const handleSentences = useCallback(() => {
     const str = dataSource.normalSentences[Math.floor(Math.random() * dataSource.normalSentences.length)].value
     setSentence(str)
@@ -90,6 +113,12 @@ function Index() {
   // useEffect(() => {
   // })
   useEffect(() => {
+    if (liarOrGugu === false) {
+      setMainIconObj(imgSourceGif)
+    }
+  }, [liarOrGugu])
+
+  useEffect(() => {
     switch (state.action) {
       case 'weather':
         return setIsShowWeather(true)
@@ -99,6 +128,18 @@ function Index() {
         return;
     }
   }, [state.action])
+
+  useEffect(() => {
+    switch (currSelectedBar) {
+      case 0:
+        setIsShowDrawer(true)
+        break;
+      case 1:
+        return reset();
+      case 2:
+        return handleShowTip()
+    }
+  }, [currSelectedBar, reset, handleShowTip])
   // 对应 onReady
   useReady(() => { })
   // 对应 onShow
@@ -116,33 +157,40 @@ function Index() {
           src={mainIconObj} onClick={handleSentences}></Image>
         <View style='margin-top: 50px; display: flex; flex-direction: column; align-items: center;'>
           {sentence ? <View style='height: 30px'><ClText align='center' text={sentence} size='large' fontWeight='bolder' textColor={defaultUIColors[Math.floor(Math.random() * defaultUIColors.length)]} /></View>
-            : <ClText text={"What The Pigeon Say Today?"} size='large' fontWeight='bolder' />}
-          <Text style='margin: 50px'>{dateTool.now(1)}</Text>
+            : <ClText text={"What The Pigeon Say Today?"} size='large' fontWeight='bolder' textColor={"gradualPink"} />}
+          <Text style={{ margin: "50px", color: '#c8aae6' }}>{dateTool.now(1)}</Text>
         </View>
       </View>
-      <View style='position:absolute;left:0px;bottom:0px; margin:20px;'>
-        <ClFloatButton
-          onActionClick={(val: any) => { val === 0 ? dispatch({ type: 'weather' }) : dispatch({ type: 'calendar' }) }}
-          size='large'
-          bgColor='blue'
-          closeWithShadow
-          direction='vertical'
-          move
-          actionList={[
-            {
-              icon: 'light'
-            },
-            {
-              icon: 'calendar'
-            }
-          ]}
-        />
-      </View>
-      <View style='position:absolute;right:0px;bottom:0px; margin:20px;'>
-        <ClButton onClick={handleShowTest} shape='round' bgColor='red' size='large'
-        >咕</ClButton>
-      </View>
-      <TipModal show={isShowTest} showAction={tipShowAction}></TipModal>
+      <AtTabBar
+        fixed
+        tabList={[
+          { title: 'Menu', iconType: 'bullet-list' },
+          { title: 'Home', iconType: 'home' },
+          { title: 'Tips', iconType: 'heart', text: '限定' }
+        ]}
+        onClick={onTabBarClick}
+        current={currSelectedBar}
+      />
+      <AtDrawer
+        width={"50vw"}
+        show={isShowDrawer}
+        mask
+        onClose={onDrawerClose}
+      >
+        <View style={{ padding: "10px 15px", lineHeight: "25px", fontSize: 20, fontWeight: 700, color: "#9171b1" }}><text >Tools</text></View>
+        {drawerItems.map((val) => {
+          return (
+            <View id={val.name} key={val.name} onClick={(e) => onDrawerItemClick(e.currentTarget.id)} style={{ padding: "10px 15px", lineHeight: "25px" }}>
+              <View style={{ borderBottom: "1px solid #c8aae6" }} >
+                <text style={{ marginLeft: 7 }}>{val.name}</text>
+                <View style={{ float: "right" }}>
+                  <AtIcon value={val.iconType} size='20' color='#c8aae6' />
+                </View>
+              </View>
+            </View>)
+        })}
+      </AtDrawer>
+      <TipModal show={isShowTip} showAction={tipShowAction}></TipModal>
       <Calendar show={isShowCalendar} showAction={calendarShowAction}></Calendar>
       <Weather show={isShowWeather} showAction={weatherShowAction} getWeather={getWeather}></Weather>
     </View>

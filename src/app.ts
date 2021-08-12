@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import './app.css'
+import './styles/custom-theme.scss'
 import "mp-colorui/dist/style/index.scss";
 
 class App extends Component {
